@@ -3,7 +3,6 @@ package org.d3if4091.kalkulatoramoeba
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.widget.Toast
 import org.d3if4091.kalkulatoramoeba.databinding.ActivityMainBinding
 
@@ -19,18 +18,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hitungAmoeba(){
-        var jumlahAwalAmoeba = binding.jumlahAwalAmoebaInp.text.toString().toDouble()
-        var jumlahPembelahanAmoeba = binding.jumlahPembelahanAmoebaInp.text.toString().toDouble()
-        var rentangWaktu = binding.rentangWaktuInp.text.toString().toDouble()
-        var jangkaWaktu = binding.jangkaWaktuInp.text.toString().toDouble()
+        var jumlahAwalAmoeba = binding.jumlahAwalAmoebaInp.text.toString()
+        //jumlah awal amoeba validation textview validation
+        if(TextUtils.isEmpty(jumlahAwalAmoeba)){
+            Toast.makeText(this, R.string.jumlah_awal_amoeba_kosong, Toast.LENGTH_LONG).show()
+            return
+        }
+        var jumlahPembelahanAmoeba = binding.jumlahPembelahanAmoebaInp.text.toString()
+        //jumlah pembelahan amoeba textview validation
+        if(TextUtils.isEmpty(jumlahPembelahanAmoeba)){
+            Toast.makeText(this, R.string.jumlah_pembelahan_amoeba_kosong, Toast.LENGTH_LONG).show()
+            return
+        }
+        var rentangWaktu = binding.rentangWaktuInp.text.toString()
+        //rentang waktu textview validation
+        if(TextUtils.isEmpty(rentangWaktu)){
+            Toast.makeText(this, R.string.rentang_waktu_membelah_kosong, Toast.LENGTH_LONG).show()
+            return
+        }
+        var jangkaWaktu = binding.jangkaWaktuInp.text.toString()
+        //jangka waktu textview validation
+        if(TextUtils.isEmpty(jangkaWaktu)){
+            Toast.makeText(this, R.string.jangka_waktu_kosong, Toast.LENGTH_LONG).show()
+            return
+        }
+        //perhitungan aritmatika pembelahan amoeba
+        var jumlahWaktuPembelahan = jangkaWaktu.toDouble() /  rentangWaktu.toDouble()
+        var hasil = jumlahAwalAmoeba.toDouble() * (Math.pow(jumlahPembelahanAmoeba.toDouble(), jumlahWaktuPembelahan))
 
-        var jumlahWaktuPembelahan = jangkaWaktu /  rentangWaktu
-
-        var hasil = jumlahAwalAmoeba *  (Math.pow(jumlahPembelahanAmoeba, jumlahWaktuPembelahan))
-
-        binding.hasil.text = Math.round(hasil).toString()
+        //fungsi ini untuk membulatkan kebawah dan menghilangkan koma pada angka
+        binding.hasil.text = Math.round(Math.floor(hasil)).toString()
     }
-
+    //untuk melakukan reset tampilan ke awal aplikasi dijalankan
     private fun reset(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
