@@ -1,14 +1,17 @@
 package org.d3if4091.kalkulatoramoeba
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
 import org.d3if4091.kalkulatoramoeba.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,8 +52,19 @@ class MainActivity : AppCompatActivity() {
         //fungsi ini untuk membulatkan kebawah dan menghilangkan koma pada angka
         binding.hasil.text = Math.round(Math.floor(hasil)).toString()
     }
-    //untuk melakukan reset tampilan ke awal aplikasi dijalankan
+    //dialog box konfirmasi sebelum reset halaman
     private fun reset(){
+        val builder = AlertDialog.Builder(this, R.style.AlertDialogCustom)
+        builder.setPositiveButton("Yes"){dialog, which -> runReset()}
+        builder.setNegativeButton("No") {dialog, which -> dialog.cancel()}
+        builder.setTitle("Yakin ingin reset halaman?")
+        builder.setMessage("Halaman yang direset tidak dapat dikembalikan.")
+        builder.setCancelable(false)
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+    //untuk melakukan reset tampilan ke awal aplikasi dijalankan
+    private fun runReset(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnHitung.setOnClickListener{hitungAmoeba()}
